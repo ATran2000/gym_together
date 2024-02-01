@@ -2,12 +2,17 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import { AuthProvider } from "./context/AuthContext";
 
-import HomePage from "./pages/HomePage";
+import { ChakraProvider } from '@chakra-ui/react'
+import theme from './libs/theme'
+
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 
-import { ChakraProvider } from '@chakra-ui/react'
-import theme from './libs/theme'
+import HomePage from "./pages/HomePage";
+import FriendsPage from "./pages/FriendsPage";
+import SchedulePage from "./pages/SchedulePage";
+import LogWorkoutPage from "./pages/LogWorkoutPage";
+import HistoryPage from "./pages/HistoryPage";
 
 function App() {
   return (
@@ -15,11 +20,15 @@ function App() {
         <Router>
           <AuthProvider>
             <Routes>
-              <Route element={<PrivateRoutes />}>
-                <Route path="/" element={<HomePage />} />
-              </Route>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
+              <Route element={<PrivateRoutes />}>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/friends" element={<FriendsPage />} />
+                <Route path="/schedule" element={<SchedulePage />} />
+                <Route path="/logworkout" element={<LogWorkoutPage />} />
+                <Route path="/history" element={<HistoryPage />} />
+              </Route>
             </Routes>
           </AuthProvider>
         </Router>

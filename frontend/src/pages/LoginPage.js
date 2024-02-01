@@ -1,7 +1,9 @@
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+
 import AuthContext from "../context/AuthContext";
 
-import { Box, Container, Heading, Text, Image, Link} from "@chakra-ui/react";
+import { Box, Container, Heading, Text, Image} from "@chakra-ui/react";
 import {FormControl, FormLabel, Input, Button} from '@chakra-ui/react'
 
 const LoginPage = () => {
@@ -11,7 +13,7 @@ const LoginPage = () => {
     <Box height="100vh" maxW="100%" m="auto" align="center">
       <Container pt={40} mb={12}>
         <Heading fontFamily="heading" fontWeight="bold" fontSize="5xl" mb={4}>GYM TOGETHER</Heading>
-        <Image src="/dumbbell_white.png" alt="Dumbbell Logo" display="inline-block"/>
+        <Image src="/dumbbell_white.png" alt="Dumbbell Logo" />
       </Container>
       
       <Container>
@@ -31,8 +33,10 @@ const LoginPage = () => {
           </form>
           <Text fontFamily="heading" fontSize="sm">
             Not A Member? {' '}
-            <Link href="/register" color="#898DB7">
-              Sign Up
+            <Link to="/register">
+              <Text as="span" color="#898DB7" _hover={{ textDecoration: "underline" }}>
+                Sign Up
+              </Text>
             </Link>
           </Text>
         </Box>
