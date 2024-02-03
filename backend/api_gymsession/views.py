@@ -6,15 +6,28 @@ from rest_framework import permissions, status
 from .models import GymSession, Workout
 from .serializers import GymSessionSerializer, WorkoutSerializer
 
+from datetime import date
+
 # Create your views here.
 
 class GymSessionDetails(APIView):
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [SessionAuthentication]
 
-    def get(self, request):
+    def get(self, request, day=None):
         user = request.user
-        gym_sessions = GymSession.objects.filter(user=user)
+
+        # If day is provided, filter gym sessions for the specified day
+        if day:
+            try:
+                day = date.fromisoformat(day)
+                gym_sessions = GymSession.objects.filter(user=user, day=day)
+            except ValueError:
+                return Response({"error": "Invalid date format. Use YYYY-MM-DD."}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            # If day is not provided, get all gym sessions for the user
+            gym_sessions = GymSession.objects.filter(user=user)
+
         serializer = GymSessionSerializer(gym_sessions, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
