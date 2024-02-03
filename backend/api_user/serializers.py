@@ -31,12 +31,22 @@ class UserLoginSerializer(ModelSerializer):
         
         return user
 
+class FriendSerializer(ModelSerializer):
+    class Meta:
+        model = UserModel
+        fields = ['id', 'username']
+
 class UserSerializer(ModelSerializer):
+    friends = FriendSerializer(many=True, read_only=True)
+    
     class Meta:
         model = UserModel
         fields = ['username', 'email', 'friends']
 
 class FriendshipSerializer(ModelSerializer):
+    sender = FriendSerializer(many=False, read_only=True)
+    receiver = FriendSerializer(many=False, read_only=True)
+
     class Meta:
         model = Friendship
         fields = '__all__'

@@ -16,13 +16,16 @@ const client = axios.create({
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [userFriends, setUserFriends] = useState(null)
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate()
 
+  // get user data everytime the user refreshes the page
   useEffect(() => {
     client.get("api/user/details/")
     .then(function(res) {
-      setUser(res.data);
+      setUser(res.data)
+      setUserFriends(res.data.friends)
     })
     .catch(function(error) {
       console.log(error)
@@ -32,6 +35,7 @@ export const AuthProvider = ({ children }) => {
     });
   }, []);
 
+  // login the user and then gets the user data
   let loginUser = async (e) => {
     e.preventDefault();
 
@@ -43,6 +47,7 @@ export const AuthProvider = ({ children }) => {
       client.get("api/user/details/")
       .then(function(res) {
         setUser(res.data);
+        setUserFriends(res.data.friends)
       })
       .catch(function(error) {
         console.log(error)
@@ -53,6 +58,7 @@ export const AuthProvider = ({ children }) => {
     });
   }
 
+  // registers the user, login the user, and then gets the user data
   let registerUser = async (e) => {
     e.preventDefault();
 
@@ -81,18 +87,21 @@ export const AuthProvider = ({ children }) => {
     })
   }
 
+  // logout the user
   let logoutUser = () => {
     client.post("api/user/logout/", {
-      withCredentials: true
     })
     .then(function(res) {
       setUser(null)
     })
   }
 
+  // context data that will be use in my pages
   let contextData = {
     client: client,
     user: user,
+    userFriends: userFriends,
+    setUserFriends: setUserFriends,
     loginUser: loginUser,
     registerUser: registerUser,
     logoutUser: logoutUser,
@@ -100,6 +109,8 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider value={contextData}>
+      {/* makes sure to grab the user's data before it goes to any page */}
+      {/* if not for this, the app thinks the user state is logged out and moves to the login screen*/}
       {loading ? null : children}
     </AuthContext.Provider>
   );

@@ -74,6 +74,7 @@ const Navbar = () => {
             </Box>
           </Box>
 
+          {/* Drawer Component for Mobile View */}
           <Drawer placement="left" onClose={toggleDrawer} isOpen={isOpen} >
             <DrawerOverlay >
               <DrawerCloseButton />
