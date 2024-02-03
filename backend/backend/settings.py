@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'api_user.apps.ApiUserConfig',
+    'api_gymsession.apps.ApiGymsessionConfig',
 ]
 
 MIDDLEWARE = [
