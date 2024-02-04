@@ -1,6 +1,9 @@
-from rest_framework.serializers import ModelSerializer, EmailField, CharField
+from rest_framework.serializers import ModelSerializer, EmailField, CharField, SerializerMethodField
 from django.contrib.auth import get_user_model, authenticate
 from .models import Friendship
+
+from api_gymsession.serializers import GymSessionSerializer  # Assuming you have a GymSessionSerializer
+from datetime import date
 
 UserModel = get_user_model()
 
@@ -32,9 +35,18 @@ class UserLoginSerializer(ModelSerializer):
         return user
 
 class FriendSerializer(ModelSerializer):
+    gym_session_today = SerializerMethodField()
+
     class Meta:
         model = UserModel
-        fields = ['id', 'username']
+        fields = ['id', 'username', 'gym_session_today']
+    
+    def get_gym_session_today(self, obj):
+        today = date.today()
+        gym_sessions_today = obj.gymsession_set.filter(day=today)
+        serializer = GymSessionSerializer(gym_sessions_today, many=True)
+
+        return serializer.data
 
 class UserSerializer(ModelSerializer):
     friends = FriendSerializer(many=True, read_only=True)

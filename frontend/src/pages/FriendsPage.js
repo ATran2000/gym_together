@@ -151,7 +151,7 @@ const FriendsPage = () => {
                   ))
                 ) : (
                   <Tr>
-                    <Td fontFamily="body" fontWeight="regular" fontSize={{ base: "sm", md: "md" }} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>No friends available. <br/> Feel free to add the creator of this website (alvin)!</Td>
+                    <Td fontFamily="body" fontWeight="regular" fontSize={{ base: "sm", md: "md" }} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>No friends available. <br/> Feel free to add the creator of this website! (alvin)</Td>
                   </Tr>
                 )}
                 </Tbody>

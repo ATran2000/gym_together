@@ -156,7 +156,7 @@ const SchedulePage = () => {
                 {schedule ? ( 
                   <Tr>
                     <Td fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>{convert24to12(schedule.time)}</Td>
-                    <Td fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>{schedule.target_muscles}</Td>
+                    <Td fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"} whiteSpace="normal">{schedule.target_muscles}</Td>
                   </Tr>
                 ) : (
                   <Tr>
