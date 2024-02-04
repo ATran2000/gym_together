@@ -26,7 +26,7 @@ const HomePage = () => {
             Friends Gyming Today
           </Text>
           <TableContainer width="100%">
-            <Table variant='simple' __css={{'tableLayout': 'fixed', width: 'full'}} borderWidth={3} borderColor={"#2D2D39"}>
+            <Table variant='simple' __css={{'tableLayout': 'fixed', width: 'full'}} borderWidth={2} borderColor={"#2D2D39"}>
               <Thead>
                 <Tr bg="#898DB7">
                   <Th fontFamily="heading" fontWeight="medium" fontSize="lg" textAlign="center" color="white" borderWidth={1} borderColor={"#2D2D39"}>Friends</Th>
@@ -35,13 +35,19 @@ const HomePage = () => {
                 </Tr>
               </Thead>
               <Tbody bg="#51546E">
-                {userFriends.map((friend) => (
+              {userFriends && userFriends.length > 0 ? (
+                userFriends.map((friend) => (
                   <Tr key={friend.id}>
-                    <Td fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>{friend.username}</Td>
-                    <Td fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}}  textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>7:00pm</Td>
-                    <Td fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}}  textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>Chest/Triceps</Td>
+                    <Td fontFamily="body" fontWeight="regular" fontSize={{ base: "sm", md: "md" }} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>{friend.username}</Td>
+                    <Td fontFamily="body" fontWeight="regular" fontSize={{ base: "sm", md: "md" }} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>7:00pm</Td>
+                    <Td fontFamily="body" fontWeight="regular" fontSize={{ base: "sm", md: "md" }} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>Chest/Triceps</Td>
                   </Tr>
-                ))}
+                ))
+              ) : (
+                <Tr>
+                  <Td colSpan={3} fontFamily="body" fontWeight="regular" fontSize={{ base: "sm", md: "md" }} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>None</Td>
+                </Tr>
+              )}
               </Tbody>
             </Table>
           </TableContainer>

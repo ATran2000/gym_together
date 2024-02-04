@@ -136,18 +136,24 @@ const FriendsPage = () => {
           </Text>
           <Box>
             <TableContainer width="100%">
-              <Table variant='simple' __css={{'tableLayout': 'fixed', width: 'full'}} borderWidth={3} borderColor={"#2D2D39"}>
+              <Table variant='simple' __css={{'tableLayout': 'fixed', width: 'full'}} borderWidth={2} borderColor={"#2D2D39"}>
                 <Thead>
                   <Tr bg="#898DB7">
                     <Th fontFamily="heading" fontWeight="medium" fontSize="lg" textAlign="center" color="white" borderWidth={1} borderColor={"#2D2D39"}>Friends</Th>
                   </Tr>
                 </Thead>
                 <Tbody bg="#51546E">
-                  {userFriends.map((friend) => (
+                {userFriends && userFriends.length > 0 ? (
+                  userFriends.map((friend) => (
                     <Tr key={friend.id}>
-                      <Td fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>{friend.username}</Td>
+                      <Td fontFamily="body" fontWeight="regular" fontSize={{ base: "sm", md: "md" }} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>{friend.username}</Td>
                     </Tr>
-                  ))}
+                  ))
+                ) : (
+                  <Tr>
+                    <Td fontFamily="body" fontWeight="regular" fontSize={{ base: "sm", md: "md" }} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>No friends available. <br/> Feel free to add the creator of this website (alvin)!</Td>
+                  </Tr>
+                )}
                 </Tbody>
               </Table>
             </TableContainer>

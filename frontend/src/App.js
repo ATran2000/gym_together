@@ -14,6 +14,8 @@ import SchedulePage from "./pages/SchedulePage";
 import LogWorkoutPage from "./pages/LogWorkoutPage";
 import HistoryPage from "./pages/HistoryPage";
 
+import './App.css' // styling in app.css is mainly for my calendar component
+
 function App() {
   return (
     <ChakraProvider theme={theme}>
