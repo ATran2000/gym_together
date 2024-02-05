@@ -27,16 +27,16 @@ SECRET_KEY = Config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['https://gym-together.netlify.app']
+ALLOWED_HOSTS = ['gym-together.netlify.app']
 
 CORS_ALLOWED_ORIGINS = [
-    'https://gym-together.netlify.app'
+    'gym-together.netlify.app'
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://gym-together.netlify.app'
+    'gym-together.netlify.app'
 ]
 
 SECURE_SSL_REDIRECT = True
