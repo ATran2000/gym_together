@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.core.validators import MinValueValidator
 
 UserModel = get_user_model()
 
@@ -20,8 +21,8 @@ class GymSession(models.Model):
 class Workout(models.Model):
     gym_session = models.ForeignKey(GymSession, on_delete=models.CASCADE)
     exercise = models.CharField(max_length=100)
-    weight = models.DecimalField(max_digits=5, decimal_places=1)
-    reps = models.PositiveIntegerField()
+    weight = models.DecimalField(max_digits=5, decimal_places=1, validators=[MinValueValidator(1)])
+    reps = models.DecimalField(max_digits=2, decimal_places=0, validators=[MinValueValidator(1)])
 
     def __str__(self):
         return f"{self.exercise} - {self.weight} lbs x {self.reps} reps"
