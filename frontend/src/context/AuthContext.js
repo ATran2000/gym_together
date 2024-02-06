@@ -11,7 +11,7 @@ axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.withCredentials = true;
 
 const client = axios.create({
-  baseURL: "api.gym-together.com/",
+  baseURL: "https://api.gym-together.com/",
 });
 
 export const AuthProvider = ({ children }) => {
