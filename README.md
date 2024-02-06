@@ -11,4 +11,4 @@ Before trying to code and create the app, I did some planning before hand and cr
  - [`Gym Together Figma Prototype`](https://www.figma.com/proto/g68lFwqZWqBGUoSgiSjhfX/Gym-Together-Prototype?node-id=2-3&starting-point-node-id=2%3A3&mode=design&t=VGbanhRFNO8o0huI-1)
 
 I decided to create a class diagram displaying how my models behave and interact with each other so that it is easier for viewers to understand my application.
-[Gym Together Class Diagram Image](https://github.com/ATran2000/gym_together/blob/main/GymTogether_ClassDiagram.jpg)
+[Gym Together Class Diagram Image](https://github.com/ATran2000/gym_together/blob/main/GymTogether_ClassDiagram.jpg?raw=true)
