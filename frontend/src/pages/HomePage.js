@@ -20,11 +20,14 @@ const HomePage = () => {
 
   let anyFriendsGymingToday = false
 
-  userFriends.forEach((friend) => {
-    if (friend.gym_session_today.length > 0) {
-      anyFriendsGymingToday = true
-    }
-  })
+  if (userFriends) {
+    userFriends.forEach((friend) => {
+      if (friend.gym_session_today.length > 0) {
+        anyFriendsGymingToday = true;
+      }
+    });
+  }
+  
 
   return (
     <Box height="100vh" maxW="100%" m="auto" align="center" display={{ base: "block", md: "flex" }}>
