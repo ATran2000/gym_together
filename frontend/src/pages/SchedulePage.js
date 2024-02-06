@@ -131,7 +131,7 @@ const SchedulePage = () => {
           <Button onClick={toggleScheduleModal} width={{base:"80%", md:"60"}} fontFamily="heading" fontWeight="semibold" fontSize="2xl" bg="#898DB7" _hover={{ bg: '#51546E' }} color="white" m={8}>
               Schedule Gym Session
           </Button>
-          <Box fontWeight="medium" fontSize="md">
+          <Box fontWeight="medium" fontSize="md" mt="8" mb="8">
             <Calendar
               onChange={handleDateChange}
               value={day}
