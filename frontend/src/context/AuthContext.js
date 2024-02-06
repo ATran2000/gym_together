@@ -27,9 +27,6 @@ export const AuthProvider = ({ children }) => {
       setUser(res.data)
       setUserFriends(res.data.friends)
     })
-    .catch(function(error) {
-      console.log(error)
-    })
     .finally(() => {
       setLoading(false); 
     });

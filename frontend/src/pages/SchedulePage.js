@@ -96,9 +96,6 @@ const SchedulePage = () => {
   // handles submitting a new schedule for a day
   let handleScheduleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log("WE ARE ABOUT TO handleScheduleSubmit")
-    console.log(csrfToken)
     
     client.post("api/gymsession/schedule/", {
         day: e.target.day.value,
@@ -116,7 +113,6 @@ const SchedulePage = () => {
       toggleScheduleModal()
     })
     .catch(function(error) {
-      console.log("handleScheduleSubmit didnt work?")
       console.log(error)
     })
   }
