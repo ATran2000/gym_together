@@ -10,5 +10,10 @@ This app would allow the users to schedule their gym sessions with friends while
 Before trying to code and create the app, I did some planning before hand and created a prototype using figma. The link to the prototype is the following:
  - [`Gym Together Figma Prototype`](https://www.figma.com/proto/g68lFwqZWqBGUoSgiSjhfX/Gym-Together-Prototype?node-id=2-3&starting-point-node-id=2%3A3&mode=design&t=VGbanhRFNO8o0huI-1)
 
-I decided to create a class diagram displaying how my models behave and interact with each other so that it is easier for viewers to understand my application.
+I also decided to create a class diagram displaying how my models behave and interact with each other so that it would be easier to understand my application.
+
 ![Gym Together Class Diagram Image](https://github.com/ATran2000/gym_together/blob/main/GymTogether_ClassDiagram.jpg?raw=true)
+
+This project is still in development, but the website is live and running. I intend to add update, deletion, and validation capabilities to the project. I will probably add more features like sending and accepting gym session invitations and more in the future.
+The link to the live website is the following:
+ - [`https://www.gym-together.com/`](https://www.gym-together.com/)
