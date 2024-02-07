@@ -6,7 +6,8 @@ from rest_framework import permissions, status
 from .models import GymSession, Workout
 from .serializers import GymSessionSerializer, WorkoutSerializer
 
-from datetime import date, datetime
+from datetime import date
+from django.utils import timezone
 
 # Create your views here.
 
@@ -66,13 +67,16 @@ class AddWorkout(APIView):
     authentication_classes = [SessionAuthentication]
 
     def post(self, request):
-        today = datetime.now().date() # user could only add workouts for the current day
+        # user could only add workouts for the current day
+        today_utc = timezone.now()
+        today_local = timezone.localtime(today_utc)
+        today = today_local.date()
 
         try:
             gym_session = GymSession.objects.get(day=today, user=request.user) # check if the user created a schedule for the current day
         except GymSession.DoesNotExist:
             # If the gym session doesn't exist, create a new one with today's date
-            timenow = datetime.now().strftime('%H:%M')
+            timenow = today_local.strftime('%H:%M')
             gym_session = GymSession.objects.create(user=request.user, day=today, time=timenow, target_muscles='null')
 
         exercise = request.data.get('exercise')
