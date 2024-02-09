@@ -38,6 +38,8 @@ const LogWorkoutPage = () => {
 
   // handles adding workouts to the exercise log
   let addWorkout = async (e) => {
+    e.preventDefault()
+
     client.post("api/gymsession/addworkout/", {
         exercise: e.target.exercise.value,
         weight: e.target.weight.value,

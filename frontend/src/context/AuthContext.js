@@ -27,6 +27,9 @@ export const AuthProvider = ({ children }) => {
       setUser(res.data)
       setUserFriends(res.data.friends)
     })
+    .catch(function(error) {
+      console.log(error)
+    })
     .finally(() => {
       setLoading(false); 
     });
@@ -34,8 +37,6 @@ export const AuthProvider = ({ children }) => {
 
   // login the user and then gets the user data
   let loginUser = async (e) => {
-    e.preventDefault();
-
     client.post("api/user/login/", {
       email: e.target.email.value,
       password: e.target.password.value,
@@ -52,6 +53,9 @@ export const AuthProvider = ({ children }) => {
       .finally(() => {
         navigate("/")
       });
+    })
+    .catch(function(error) {
+      console.log("Error during login:", error);
     });
   }
 
