@@ -44,6 +44,8 @@ const FriendsPage = () => {
 
   // handles sending friend requests to other users
   let sendFriendRequest = async (e) => {
+    e.preventDefault()
+
     client.post("api/user/send_friend_request/", {
         receiver_username: e.target.username.value
       },
@@ -52,6 +54,9 @@ const FriendsPage = () => {
         headers: {
           'X-CSRFToken': csrfToken,
       },
+    })
+    .then(function (res) { // this is so that the modal closes when the user submits
+      toggleAddFriendModal()
     })
     .catch(function(error) {
       console.log(error)
