@@ -36,26 +36,6 @@ const LogWorkoutPage = () => {
 
   const csrfToken = getCookie('csrftoken');
 
-  // handles adding workouts to the exercise log
-  let addWorkout = async (e) => {
-    e.preventDefault()
-
-    client.post("api/gymsession/addworkout/", {
-        exercise: e.target.exercise.value,
-        weight: e.target.weight.value,
-        reps: e.target.reps.value,
-      },
-      {
-        withCredentials: true,
-        headers: {
-          'X-CSRFToken': csrfToken,
-      },
-    })
-    .catch(function(error) {
-      console.log(error)
-    })
-  }
-
   // this function converts dates like Mon Jan 1 2024 00:00:00 GMT-0500 (Eastern Standard Time) to 2024-01-01
   // this date will be sent to the backend and is needed because my date field for my model rquires it
   let formatDate = (date) => {
@@ -82,6 +62,30 @@ const LogWorkoutPage = () => {
       console.log(error);
     });
   }, [client]);
+
+  // handles adding workouts to the exercise log
+  let addWorkout = async (e) => {
+    e.preventDefault()
+
+    client.post("api/gymsession/addworkout/", {
+        exercise: e.target.exercise.value,
+        weight: e.target.weight.value,
+        reps: e.target.reps.value,
+      },
+      {
+        withCredentials: true,
+        headers: {
+          'X-CSRFToken': csrfToken,
+      },
+    })
+    .then(function (res) { // this is so that the modal closes and the view updates when the user submits
+      getGymSession();
+      toggleAddWorkoutModal()
+    })
+    .catch(function(error) {
+      console.log(error)
+    })
+  }
 
   // gets the gym session for the current day everytime the page rerenders
   useEffect(() => {
