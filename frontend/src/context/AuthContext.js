@@ -1,5 +1,4 @@
 import { createContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const AuthContext = createContext();
@@ -16,89 +15,73 @@ const client = axios.create({
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [userFriends, setUserFriends] = useState(null)
+  const [userFriends, setUserFriends] = useState(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate()
 
   // get user data everytime the user refreshes the page
   useEffect(() => {
-    client.get("api/user/details/")
-    .then(function(res) {
-      setUser(res.data)
-      setUserFriends(res.data.friends)
-    })
-    .catch(function(error) {
-      console.log(error)
-    })
-    .finally(() => {
-      setLoading(false); 
-    });
+    const fetchUserData = async () => {
+      try {
+        const userDetailsResponse = await client.get("api/user/details/");
+        setUser(userDetailsResponse.data);
+        setUserFriends(userDetailsResponse.data.friends);
+      } catch (error) {
+        // console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
   }, []);
 
   // login the user and then gets the user data
-  let loginUser = async (e) => {
-    client.post("api/user/login/", {
-      email: e.target.email.value,
-      password: e.target.password.value,
-    })
-    .then(function(res) {
-      client.get("api/user/details/")
-      .then(function(res) {
-        setUser(res.data);
-        setUserFriends(res.data.friends)
-      })
-      .catch(function(error) {
-        console.log(error)
-      })
-      .finally(() => {
-        navigate("/")
+  let loginUser = async (email, password) => {
+    try {
+      await client.post("api/user/login/", {
+        email: email,
+        password: password,
       });
-    })
-    .catch(function(error) {
-      console.log("Error during login:", error);
-    });
-  }
+
+      // assuming login was successful, fetch user details
+      let userDetailsResponse = await client.get("api/user/details/");
+      setUser(userDetailsResponse.data);
+      setUserFriends(userDetailsResponse.data.friends);
+    } catch (error) {
+      // console.error("Error during login:", error);
+      throw new Error("Login failed. Please check your email and password and try again.");
+    }
+  };
 
   // registers the user, login the user, and then gets the user data
-  let registerUser = async (e) => {
-    e.preventDefault();
-
-    client.post("api/user/register/", {
-      username: e.target.username.value,
-      email: e.target.email.value,
-      password: e.target.password.value,
-    })
-    .then(function(res) {
-      client.post("api/user/login/", {
-        email: e.target.email.value,
-        password: e.target.password.value,
-      })
-      .then(function(res) {
-        client.get("api/user/details")
-        .then(function(res) {
-          setUser(res.data);
-        })
-        .catch(function(error) {
-          console.log(error)
-        })
-        .finally(() => {
-          navigate("/")
-        });
+  const registerUser = async (username, email, password) => {
+    try {
+      await client.post("api/user/register/", {
+        username: username,
+        email: email,
+        password: password,
       });
-    })
-  }
+
+      // Login the user after successful registration
+      await loginUser(email, password);
+    } catch (error) {
+      // console.error("Error during registration:", error);
+      throw error;
+    }
+  };
 
   // logout the user
-  let logoutUser = () => {
-    client.post("api/user/logout/", {
-    })
-    .then(function(res) {
-      setUser(null)
-    })
-  }
+  const logoutUser = async () => {
+    try {
+      await client.post("api/user/logout/");
+      setUser(null);
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
 
   // context data that will be use in my pages
-  let contextData = {
+  const contextData = {
     client: client,
     user: user,
     userFriends: userFriends,
