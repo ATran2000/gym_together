@@ -2,13 +2,11 @@ import React, { useContext, useState, useEffect, useCallback } from "react";
 
 import AuthContext from "../context/AuthContext";
 
-import { Box, Container, Heading, Text } from "@chakra-ui/react";
+import { Box, Heading, Text } from "@chakra-ui/react";
 import { Table, TableContainer, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // Need this import in order to style react-calendar
-
-import Navbar from "../components/Navbar"
 
 const HistoryPage = () => {
   let { client } = useContext(AuthContext);
@@ -55,52 +53,49 @@ const HistoryPage = () => {
   }, [day, getGymSession]);
 
   return (
-    <Box height="100vh" maxW="100%" m="auto" align="center" display={{ base: "block", md: "flex" }}>
-        <Navbar />
-        <Container maxW={{base:"100%", md:"80%"}} p="4">
-          <Heading display={{ base: "none", md: "block" }} fontFamily="heading" fontWeight="bold" fontSize="5xl">History</Heading>
-          <Heading display={{ base: "block", md: "none" }} fontFamily="heading" fontWeight="bold" fontSize="4xl">History</Heading>
-          <Box fontWeight="medium" fontSize="md" m="8">
-            <Calendar
-              onChange={handleDateChange}
-              value={day}
-              className="custom-calendar"
-              calendarType="gregory"
-            />
-          </Box>
-          <Text fontFamily="heading" fontWeight="semibold" fontSize="2xl" mt="8">
-            {/* converts dates like 2024-01-01 to Mon Jan 1 2024 00:00:00 GMT-0500 (Eastern Standard Time) for readibility */}
-            {day.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-          </Text>
-          <Box>
-            <TableContainer width="100%">
-              <Table variant='simple' __css={{'tableLayout': 'fixed', width: 'full'}} borderWidth={2} borderColor={"#2D2D39"}>
-                <Thead>
-                  <Tr bg="#898DB7">
-                    <Th fontFamily="heading" fontWeight="medium" fontSize="lg" textAlign="center" color="white" borderWidth={1} borderColor={"#2D2D39"}>Exercise</Th>
-                    <Th fontFamily="heading" fontWeight="medium" fontSize="lg" textAlign="center" color="white" borderWidth={1} borderColor={"#2D2D39"}>Weight</Th>
-                    <Th fontFamily="heading" fontWeight="medium" fontSize="lg" textAlign="center" color="white" borderWidth={1} borderColor={"#2D2D39"}>Reps</Th>
-                  </Tr>
-                </Thead>
-                <Tbody bg="#51546E">
-                {history && history.length > 0 ? ( 
-                  history.map((workout) => (
-                    <Tr key={workout.id}>
-                      <Td fontFamily="body" fontWeight="regular" fontSize={{ base: "sm", md: "md" }} textAlign="center" borderWidth={1} borderColor={"#2D2D39"} whiteSpace="normal">{workout.exercise}</Td>
-                      <Td fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>{workout.weight} lbs</Td>
-                      <Td fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>{workout.reps}</Td>
-                    </Tr>
-                  ))
-                ) : (
-                  <Tr>
-                    <Td colSpan={3} fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>No workout history.</Td>
-                  </Tr>
-                )}
-                </Tbody>
-              </Table>
-            </TableContainer>
-          </Box>
-        </Container>
+    <Box>
+      <Heading display={{ base: "none", md: "block" }} fontFamily="heading" fontWeight="bold" fontSize="5xl">History</Heading>
+      <Heading display={{ base: "block", md: "none" }} fontFamily="heading" fontWeight="bold" fontSize="4xl">History</Heading>
+      <Box fontWeight="medium" fontSize="md" m="8">
+        <Calendar
+          onChange={handleDateChange}
+          value={day}
+          className="custom-calendar"
+          calendarType="gregory"
+        />
+      </Box>
+      <Text fontFamily="heading" fontWeight="semibold" fontSize="2xl" mt="8">
+        {/* converts dates like 2024-01-01 to Mon Jan 1 2024 00:00:00 GMT-0500 (Eastern Standard Time) for readibility */}
+        {day.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+      </Text>
+      <Box>
+        <TableContainer width="100%">
+          <Table variant='simple' __css={{'tableLayout': 'fixed', width: 'full'}} borderWidth={2} borderColor={"#2D2D39"}>
+            <Thead>
+              <Tr bg="#898DB7">
+                <Th fontFamily="heading" fontWeight="medium" fontSize="lg" textAlign="center" color="white" borderWidth={1} borderColor={"#2D2D39"}>Exercise</Th>
+                <Th fontFamily="heading" fontWeight="medium" fontSize="lg" textAlign="center" color="white" borderWidth={1} borderColor={"#2D2D39"}>Weight</Th>
+                <Th fontFamily="heading" fontWeight="medium" fontSize="lg" textAlign="center" color="white" borderWidth={1} borderColor={"#2D2D39"}>Reps</Th>
+              </Tr>
+            </Thead>
+            <Tbody bg="#51546E">
+            {history && history.length > 0 ? ( 
+              history.map((workout) => (
+                <Tr key={workout.id}>
+                  <Td fontFamily="body" fontWeight="regular" fontSize={{ base: "sm", md: "md" }} textAlign="center" borderWidth={1} borderColor={"#2D2D39"} whiteSpace="normal">{workout.exercise}</Td>
+                  <Td fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>{workout.weight} lbs</Td>
+                  <Td fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>{workout.reps}</Td>
+                </Tr>
+              ))
+            ) : (
+              <Tr>
+                <Td colSpan={3} fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>No workout history.</Td>
+              </Tr>
+            )}
+            </Tbody>
+          </Table>
+        </TableContainer>
+      </Box>
     </Box>
   );
 };

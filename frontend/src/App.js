@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import PublicRoutes from "./utils/PublicRoutes";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import { AuthProvider } from "./context/AuthContext";
 
@@ -13,6 +14,7 @@ import FriendsPage from "./pages/FriendsPage";
 import SchedulePage from "./pages/SchedulePage";
 import LogWorkoutPage from "./pages/LogWorkoutPage";
 import HistoryPage from "./pages/HistoryPage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 import './App.css' // styling in app.css is mainly for my calendar component
 
@@ -22,8 +24,10 @@ function App() {
         <Router>
           <AuthProvider>
             <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
+              <Route element={<PublicRoutes />}>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+              </Route>
               <Route element={<PrivateRoutes />}>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/friends" element={<FriendsPage />} />
@@ -31,6 +35,7 @@ function App() {
                 <Route path="/logworkout" element={<LogWorkoutPage />} />
                 <Route path="/history" element={<HistoryPage />} />
               </Route>
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </AuthProvider>
         </Router>

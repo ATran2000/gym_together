@@ -2,15 +2,13 @@ import React, { useContext, useState, useEffect, useCallback } from "react";
 
 import AuthContext from "../context/AuthContext";
 
-import { Box, Container, Heading, Button, Text } from "@chakra-ui/react";
+import { Box, Heading, Button, Text } from "@chakra-ui/react";
 import { Table, TableContainer, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton } from '@chakra-ui/react';
 import { FormControl, FormLabel, Input } from '@chakra-ui/react'
 
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // Need this import in order to style react-calendar
-
-import Navbar from "../components/Navbar"
 
 const SchedulePage = () => {
   let { client } = useContext(AuthContext);
@@ -123,80 +121,77 @@ const SchedulePage = () => {
   }, [day, getGymSession]);
 
   return (
-    <Box height="100vh" maxW="100%" m="auto" align="center" display={{ base: "block", md: "flex" }}>
-        <Navbar />
-        <Container maxW={{base:"100%", md:"80%"}} p="4">
-          <Heading display={{ base: "none", md: "block" }} fontFamily="heading" fontWeight="bold" fontSize="5xl">Schedule</Heading>
-          <Heading display={{ base: "block", md: "none" }} fontFamily="heading" fontWeight="bold" fontSize="4xl">Schedule</Heading>
-          <Button onClick={toggleScheduleModal} width={{base:"80%", md:"60"}} fontFamily="heading" fontWeight="semibold" fontSize="2xl" bg="#898DB7" _hover={{ bg: '#51546E' }} color="white" m={8}>
-              Schedule Gym Session
-          </Button>
-          <Box fontWeight="medium" fontSize="md" mt="8" mb="8">
-            <Calendar
-              onChange={handleDateChange}
-              value={day}
-              className="custom-calendar"
-              calendarType="gregory"
-            />
-          </Box>
-          <Text fontFamily="heading" fontWeight="semibold" fontSize="2xl" mt="8">
-            {/* converts dates like 2024-01-01 to Mon Jan 1 2024 00:00:00 GMT-0500 (Eastern Standard Time) for readibility */}
-            {day.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-          </Text>
-          <Box>
-            <TableContainer width="100%">
-              <Table variant='simple' __css={{'tableLayout': 'fixed', width: 'full'}} borderWidth={2} borderColor={"#2D2D39"}>
-                <Thead>
-                  <Tr bg="#898DB7">
-                    <Th fontFamily="heading" fontWeight="medium" fontSize="lg" textAlign="center" color="white" borderWidth={1} borderColor={"#2D2D39"}>Time</Th>
-                    <Th fontFamily="heading" fontWeight="medium" fontSize="lg" textAlign="center" color="white" borderWidth={1} borderColor={"#2D2D39"}>Target Muscles</Th>
-                  </Tr>
-                </Thead>
-                <Tbody bg="#51546E">
-                {schedule ? ( 
-                  <Tr>
-                    <Td fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>{convert24to12(schedule.time)}</Td>
-                    <Td fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"} whiteSpace="normal">{schedule.target_muscles}</Td>
-                  </Tr>
-                ) : (
-                  <Tr>
-                    <Td colSpan={2} fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>Rest Day? If not schedule a session!</Td>
-                  </Tr>
-                )}
-                </Tbody>
-              </Table>
-            </TableContainer>
-          </Box>
+    <Box>
+      <Heading display={{ base: "none", md: "block" }} fontFamily="heading" fontWeight="bold" fontSize="5xl">Schedule</Heading>
+      <Heading display={{ base: "block", md: "none" }} fontFamily="heading" fontWeight="bold" fontSize="4xl">Schedule</Heading>
+      <Button onClick={toggleScheduleModal} width={{base:"80%", md:"60"}} fontFamily="heading" fontWeight="semibold" fontSize="2xl" bg="#898DB7" _hover={{ bg: '#51546E' }} color="white" m={8}>
+          Schedule Gym Session
+      </Button>
+      <Box fontWeight="medium" fontSize="md" mt="8" mb="8">
+        <Calendar
+          onChange={handleDateChange}
+          value={day}
+          className="custom-calendar"
+          calendarType="gregory"
+        />
+      </Box>
+      <Text fontFamily="heading" fontWeight="semibold" fontSize="2xl" mt="8">
+        {/* converts dates like 2024-01-01 to Mon Jan 1 2024 00:00:00 GMT-0500 (Eastern Standard Time) for readibility */}
+        {day.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+      </Text>
+      <Box>
+        <TableContainer width="100%">
+          <Table variant='simple' __css={{'tableLayout': 'fixed', width: 'full'}} borderWidth={2} borderColor={"#2D2D39"}>
+            <Thead>
+              <Tr bg="#898DB7">
+                <Th fontFamily="heading" fontWeight="medium" fontSize="lg" textAlign="center" color="white" borderWidth={1} borderColor={"#2D2D39"}>Time</Th>
+                <Th fontFamily="heading" fontWeight="medium" fontSize="lg" textAlign="center" color="white" borderWidth={1} borderColor={"#2D2D39"}>Target Muscles</Th>
+              </Tr>
+            </Thead>
+            <Tbody bg="#51546E">
+            {schedule ? ( 
+              <Tr>
+                <Td fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>{convert24to12(schedule.time)}</Td>
+                <Td fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"} whiteSpace="normal">{schedule.target_muscles}</Td>
+              </Tr>
+            ) : (
+              <Tr>
+                <Td colSpan={2} fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>Rest Day? If not schedule a session!</Td>
+              </Tr>
+            )}
+            </Tbody>
+          </Table>
+        </TableContainer>
+      </Box>
 
-          {/* popup modal for scheduling gym sessions */}
-          <Modal isOpen={isOpenScheduleModal} onClose={toggleScheduleModal} size={{base:"sm", md:"md"}}>
-            <ModalOverlay />
-            <ModalContent bg="#51546E">
-              <ModalHeader fontFamily="heading" fontWeight="semibold" fontSize="2xl">
-                Schedule A Gym Session
-                {/* converts dates like 2024-01-01 to Mon Jan 1 2024 00:00:00 GMT-0500 (Eastern Standard Time) for readibility */}
-                <Text fontWeight="medium" fontSize="lg">{day.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</Text>
-              </ModalHeader>
-              <ModalCloseButton />
-              <ModalBody>
-                <Box>
-                  <form onSubmit={handleScheduleSubmit}>
-                    <FormControl mb={8}>
-                      <Input type='hidden' id="day" value={formatDate(day)} /> {/* note that day input is hidden and automatically given */}
-                      <FormLabel fontFamily="heading" fontWeight="medium" fontSize="md">Time</FormLabel>
-                      <Input type='time' id="time" fontFamily="body" fontWeight="regular" fontSize="md" />
-                      <FormLabel fontFamily="heading" fontWeight="medium" fontSize="md" mt="4">Target Muscles</FormLabel>
-                      <Input type='text' id="target_muscles" fontFamily="body" fontWeight="regular" fontSize="md" placeholder="Target Muscles" />
-                    </FormControl>
-                    <Button type="submit" fontFamily="heading" fontWeight="medium" bg="#898DB7" _hover={{ bg: '#51546E' }} color="white" width="100%" mb={4}>
-                        Schedule
-                    </Button>
-                  </form>
-                </Box>
-              </ModalBody>
-            </ModalContent>
-          </Modal>
-        </Container>
+      {/* popup modal for scheduling gym sessions */}
+      <Modal isOpen={isOpenScheduleModal} onClose={toggleScheduleModal} size={{base:"sm", md:"md"}}>
+        <ModalOverlay />
+        <ModalContent bg="#51546E">
+          <ModalHeader fontFamily="heading" fontWeight="semibold" fontSize="2xl">
+            Schedule A Gym Session
+            {/* converts dates like 2024-01-01 to Mon Jan 1 2024 00:00:00 GMT-0500 (Eastern Standard Time) for readibility */}
+            <Text fontWeight="medium" fontSize="lg">{day.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</Text>
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Box>
+              <form onSubmit={handleScheduleSubmit}>
+                <FormControl mb={8}>
+                  <Input type='hidden' id="day" value={formatDate(day)} /> {/* note that day input is hidden and automatically given */}
+                  <FormLabel fontFamily="heading" fontWeight="medium" fontSize="md">Time</FormLabel>
+                  <Input type='time' id="time" fontFamily="body" fontWeight="regular" fontSize="md" />
+                  <FormLabel fontFamily="heading" fontWeight="medium" fontSize="md" mt="4">Target Muscles</FormLabel>
+                  <Input type='text' id="target_muscles" fontFamily="body" fontWeight="regular" fontSize="md" placeholder="Target Muscles" />
+                </FormControl>
+                <Button type="submit" fontFamily="heading" fontWeight="medium" bg="#898DB7" _hover={{ bg: '#51546E' }} color="white" width="100%" mb={4}>
+                    Schedule
+                </Button>
+              </form>
+            </Box>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };

@@ -7,7 +7,7 @@ import { Box, Container, Heading, Text, Image } from "@chakra-ui/react";
 import { FormControl, FormLabel, Input, Button } from "@chakra-ui/react";
 
 const RegisterPage = () => {
-  let { registerUser } = useContext(AuthContext);
+  const { registerUser } = useContext(AuthContext);
   const navigate = useNavigate();
 
   // using states for credentials for validation purposes

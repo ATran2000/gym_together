@@ -2,12 +2,10 @@ import React, { useContext, useState, useEffect, useCallback } from "react";
 
 import AuthContext from "../context/AuthContext";
 
-import { Box, Container, Heading, Button, Text } from "@chakra-ui/react";
+import { Box, Heading, Button, Text } from "@chakra-ui/react";
 import { Table, TableContainer, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton } from '@chakra-ui/react';
 import { FormControl, FormLabel, Input } from '@chakra-ui/react'
-
-import Navbar from "../components/Navbar"
 
 const LogWorkoutPage = () => {
   let { client } = useContext(AuthContext);
@@ -93,75 +91,72 @@ const LogWorkoutPage = () => {
   }, [getGymSession]);
 
   return (
-    <Box height="100vh" maxW="100%" m="auto" align="center" display={{ base: "block", md: "flex" }}>
-        <Navbar />
-        <Container maxW={{base:"100%", md:"80%"}} p="4">
-          <Heading display={{ base: "none", md: "block" }} fontFamily="heading" fontWeight="bold" fontSize="5xl">Log Workout</Heading>
-          <Heading display={{ base: "block", md: "none" }} fontFamily="heading" fontWeight="bold" fontSize="4xl">Log Workout</Heading>
-          <Button onClick={toggleAddWorkoutModal} width={{base:"80%", md:"60"}} fontFamily="heading" fontWeight="semibold" fontSize="2xl" bg="#898DB7" _hover={{ bg: '#51546E' }} color="white" m={8}>
-              Add Exercise
-          </Button>
-          <Text fontFamily="heading" fontWeight="semibold" fontSize="2xl">
-            Exercise Log
-          </Text>
-          <Box>
-            <TableContainer width="100%">
-              <Table variant='simple' __css={{'tableLayout': 'fixed', width: 'full'}} borderWidth={2} borderColor={"#2D2D39"}>
-                <Thead>
-                  <Tr bg="#898DB7">
-                    <Th fontFamily="heading" fontWeight="medium" fontSize="lg" textAlign="center" color="white" borderWidth={1} borderColor={"#2D2D39"}>Exercise</Th>
-                    <Th fontFamily="heading" fontWeight="medium" fontSize="lg" textAlign="center" color="white" borderWidth={1} borderColor={"#2D2D39"}>Weight</Th>
-                    <Th fontFamily="heading" fontWeight="medium" fontSize="lg" textAlign="center" color="white" borderWidth={1} borderColor={"#2D2D39"}>Reps</Th>
-                  </Tr>
-                </Thead>
-                <Tbody bg="#51546E">
-                {workouts && workouts.length > 0 ? ( 
-                  workouts.map((workout) => (
-                    <Tr key={workout.id}>
-                      <Td fontFamily="body" fontWeight="regular" fontSize={{ base: "sm", md: "md" }} textAlign="center" borderWidth={1} borderColor={"#2D2D39"} whiteSpace="normal">{workout.exercise}</Td>
-                      <Td fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>{workout.weight} lbs</Td>
-                      <Td fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>{workout.reps}</Td>
-                    </Tr>
-                  ))
-                ) : (
-                  <Tr>
-                    <Td colSpan={3} fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>Add to your exercise log!</Td>
-                  </Tr>
-                )}
-                </Tbody>
-              </Table>
-            </TableContainer>
-          </Box>
+    <Box>
+      <Heading display={{ base: "none", md: "block" }} fontFamily="heading" fontWeight="bold" fontSize="5xl">Log Workout</Heading>
+      <Heading display={{ base: "block", md: "none" }} fontFamily="heading" fontWeight="bold" fontSize="4xl">Log Workout</Heading>
+      <Button onClick={toggleAddWorkoutModal} width={{base:"80%", md:"60"}} fontFamily="heading" fontWeight="semibold" fontSize="2xl" bg="#898DB7" _hover={{ bg: '#51546E' }} color="white" m={8}>
+          Add Exercise
+      </Button>
+      <Text fontFamily="heading" fontWeight="semibold" fontSize="2xl">
+        Exercise Log
+      </Text>
+      <Box>
+        <TableContainer width="100%">
+          <Table variant='simple' __css={{'tableLayout': 'fixed', width: 'full'}} borderWidth={2} borderColor={"#2D2D39"}>
+            <Thead>
+              <Tr bg="#898DB7">
+                <Th fontFamily="heading" fontWeight="medium" fontSize="lg" textAlign="center" color="white" borderWidth={1} borderColor={"#2D2D39"}>Exercise</Th>
+                <Th fontFamily="heading" fontWeight="medium" fontSize="lg" textAlign="center" color="white" borderWidth={1} borderColor={"#2D2D39"}>Weight</Th>
+                <Th fontFamily="heading" fontWeight="medium" fontSize="lg" textAlign="center" color="white" borderWidth={1} borderColor={"#2D2D39"}>Reps</Th>
+              </Tr>
+            </Thead>
+            <Tbody bg="#51546E">
+            {workouts && workouts.length > 0 ? ( 
+              workouts.map((workout) => (
+                <Tr key={workout.id}>
+                  <Td fontFamily="body" fontWeight="regular" fontSize={{ base: "sm", md: "md" }} textAlign="center" borderWidth={1} borderColor={"#2D2D39"} whiteSpace="normal">{workout.exercise}</Td>
+                  <Td fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>{workout.weight} lbs</Td>
+                  <Td fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>{workout.reps}</Td>
+                </Tr>
+              ))
+            ) : (
+              <Tr>
+                <Td colSpan={3} fontFamily="body" fontWeight="regular" fontSize={{base:"sm", md:"md"}} textAlign="center" borderWidth={1} borderColor={"#2D2D39"}>Add to your exercise log!</Td>
+              </Tr>
+            )}
+            </Tbody>
+          </Table>
+        </TableContainer>
+      </Box>
 
-          {/* popup modal for scheduling gym sessions */}
-          <Modal isOpen={isOpenAddWorkoutModal} onClose={toggleAddWorkoutModal} size={{base:"sm", md:"md"}}>
-            <ModalOverlay />
-            <ModalContent bg="#51546E">
-              <ModalHeader fontFamily="heading" fontWeight="semibold" fontSize="2xl">
-                Add Exercise
-                <Text fontWeight="medium" fontSize="lg">Input Details Of Your Set</Text>
-              </ModalHeader>
-              <ModalCloseButton />
-              <ModalBody>
-                <Box>
-                  <form onSubmit={addWorkout}>
-                    <FormControl mb={8}>
-                      <FormLabel fontFamily="heading" fontWeight="medium" fontSize="md">Exercise</FormLabel>
-                      <Input type='text' id="exercise" fontFamily="body" fontWeight="regular" fontSize="md" placeholder="Exercise" />
-                      <FormLabel fontFamily="heading" fontWeight="medium" fontSize="md" mt="4">Weight</FormLabel>
-                      <Input type='number' id="weight" fontFamily="body" fontWeight="regular" fontSize="md" placeholder="Weight" />
-                      <FormLabel fontFamily="heading" fontWeight="medium" fontSize="md" mt="4">Reps</FormLabel>
-                      <Input type='number' id="reps" fontFamily="body" fontWeight="regular" fontSize="md" placeholder="Reps" />
-                    </FormControl>
-                    <Button type="submit" fontFamily="heading" fontWeight="medium" bg="#898DB7" _hover={{ bg: '#51546E' }} color="white" width="100%" mb={4}>
-                        Add Exercise
-                    </Button>
-                  </form>
-                </Box>
-              </ModalBody>
-            </ModalContent>
-          </Modal>
-        </Container>
+      {/* popup modal for scheduling gym sessions */}
+      <Modal isOpen={isOpenAddWorkoutModal} onClose={toggleAddWorkoutModal} size={{base:"sm", md:"md"}}>
+        <ModalOverlay />
+        <ModalContent bg="#51546E">
+          <ModalHeader fontFamily="heading" fontWeight="semibold" fontSize="2xl">
+            Add Exercise
+            <Text fontWeight="medium" fontSize="lg">Input Details Of Your Set</Text>
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Box>
+              <form onSubmit={addWorkout}>
+                <FormControl mb={8}>
+                  <FormLabel fontFamily="heading" fontWeight="medium" fontSize="md">Exercise</FormLabel>
+                  <Input type='text' id="exercise" fontFamily="body" fontWeight="regular" fontSize="md" placeholder="Exercise" />
+                  <FormLabel fontFamily="heading" fontWeight="medium" fontSize="md" mt="4">Weight</FormLabel>
+                  <Input type='number' id="weight" fontFamily="body" fontWeight="regular" fontSize="md" placeholder="Weight" />
+                  <FormLabel fontFamily="heading" fontWeight="medium" fontSize="md" mt="4">Reps</FormLabel>
+                  <Input type='number' id="reps" fontFamily="body" fontWeight="regular" fontSize="md" placeholder="Reps" />
+                </FormControl>
+                <Button type="submit" fontFamily="heading" fontWeight="medium" bg="#898DB7" _hover={{ bg: '#51546E' }} color="white" width="100%" mb={4}>
+                    Add Exercise
+                </Button>
+              </form>
+            </Box>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };
