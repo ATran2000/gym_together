@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // login the user and then gets the user data
-  let loginUser = async (email, password) => {
+  const loginUser = async (email, password) => {
     try {
       await client.post("api/user/login/", {
         email: email,
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
       });
 
       // assuming login was successful, fetch user details
-      let userDetailsResponse = await client.get("api/user/details/");
+      const userDetailsResponse = await client.get("api/user/details/");
       setUser(userDetailsResponse.data);
       setUserFriends(userDetailsResponse.data.friends);
     } catch (error) {
@@ -80,6 +80,22 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // function that will be used to get the csrftoken cookie
+  const getCookie = (name) => {
+    const value = `; ${document.cookie}`;  // Get the entire cookie string from the document
+    const parts = value.split(`; ${name}=`);  // Split the cookie string into an array of substrings, using the provided cookie name as the delimiter
+
+    if (parts.length === 2) {  // Check if there are two parts in the array
+      // If there are two parts, pop the last element, which contains the value of the cookie,
+      // and then split it by semicolon to remove any additional cookie-related information
+      return parts.pop().split(';').shift();
+    }
+
+    return null; // If there are not two parts, or the cookie with the specified name is not found, return null
+  };
+
+  const csrfToken = getCookie('csrftoken');
+
   // context data that will be use in my pages
   const contextData = {
     client: client,
@@ -89,6 +105,7 @@ export const AuthProvider = ({ children }) => {
     loginUser: loginUser,
     registerUser: registerUser,
     logoutUser: logoutUser,
+    csrfToken: csrfToken,
   };
 
   return (

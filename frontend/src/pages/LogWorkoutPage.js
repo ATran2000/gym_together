@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect, useCallback } from "react";
 
 import AuthContext from "../context/AuthContext";
+import { formatDateBackend } from "../utils/DateTimeUtils"
 
 import { Box, Heading, Button, Text } from "@chakra-ui/react";
 import { Table, TableContainer, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
@@ -8,92 +9,64 @@ import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseBu
 import { FormControl, FormLabel, Input } from '@chakra-ui/react'
 
 const LogWorkoutPage = () => {
-  let { client } = useContext(AuthContext);
+  const { client, csrfToken } = useContext(AuthContext);
 
-  let [workouts, setWorkouts] = useState([])
+  const [workouts, setWorkouts] = useState([])
 
-  let [isOpenAddWorkoutModal, setOpenAddWorkoutModal] = useState(false);
+  const [isOpenAddWorkoutModal, setOpenAddWorkoutModal] = useState(false);
 
-  let toggleAddWorkoutModal = () => {
+  const toggleAddWorkoutModal = () => {
     setOpenAddWorkoutModal(!isOpenAddWorkoutModal);
   };
 
-  // function that will be used to get the csrftoken cookie
-  const getCookie = (name) => {
-    const value = `; ${document.cookie}`;  // Get the entire cookie string from the document
-    const parts = value.split(`; ${name}=`);  // Split the cookie string into an array of substrings, using the provided cookie name as the delimiter
-
-    if (parts.length === 2) {  // Check if there are two parts in the array
-      // If there are two parts, pop the last element, which contains the value of the cookie,
-      // and then split it by semicolon to remove any additional cookie-related information
-      return parts.pop().split(';').shift();
-    }
-
-    return null; // If there are not two parts, or the cookie with the specified name is not found, return null
-  };
-
-  const csrfToken = getCookie('csrftoken');
-
-  // this function converts dates like Mon Jan 1 2024 00:00:00 GMT-0500 (Eastern Standard Time) to 2024-01-01
-  // this date will be sent to the backend and is needed because my date field for my model rquires it
-  let formatDate = (date) => {
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-
-    return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-  };
-
   // gets and sets the workouts for today's gym session
-  let getGymSession = useCallback(() => {
-    let today = formatDate(new Date());
+  const loadWorkouts = useCallback(async () => {
+    try {
+      const today = formatDateBackend(new Date());
+      const res = await client.get(`api/gymsession/details/${today}`, {});
 
-    client.get(`api/gymsession/details/${today}`, {})
-    .then(function (res) {
       if (res.data[0]) {
         setWorkouts(res.data[0].workouts)
       } else {
         setWorkouts([])
       }
-    })
-    .catch(function (error) {
+    } catch (error) {
       console.log(error);
-    });
+    }
   }, [client]);
 
   // handles adding workouts to the exercise log
-  let addWorkout = async (e) => {
+  const addWorkout = async (e) => {
     e.preventDefault()
 
-    client.post("api/gymsession/addworkout/", {
+    try {
+      await client.post("api/gymsession/addworkout/", {
         exercise: e.target.exercise.value,
         weight: e.target.weight.value,
         reps: e.target.reps.value,
-      },
-      {
+      }, {
         withCredentials: true,
         headers: {
           'X-CSRFToken': csrfToken,
-      },
-    })
-    .then(function (res) { // this is so that the modal closes and the view updates when the user submits
-      getGymSession();
-      toggleAddWorkoutModal()
-    })
-    .catch(function(error) {
-      console.log(error)
-    })
+        },
+      });
+  
+      // updates the view and closes the modal after successful submit
+      await loadWorkouts();
+      toggleAddWorkoutModal();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  // gets the gym session for the current day everytime the page rerenders
+  // loads the workouts for the current day everytime the page rerenders
   useEffect(() => {
-    getGymSession()
-  }, [getGymSession]);
+    loadWorkouts()
+  }, [loadWorkouts]);
 
   return (
     <Box>
-      <Heading display={{ base: "none", md: "block" }} fontFamily="heading" fontWeight="bold" fontSize="5xl">Log Workout</Heading>
-      <Heading display={{ base: "block", md: "none" }} fontFamily="heading" fontWeight="bold" fontSize="4xl">Log Workout</Heading>
+      <Heading fontFamily="heading" fontWeight="bold" fontSize={{ base: "4xl", md: "5xl" }}>Log Workout</Heading>
       <Button onClick={toggleAddWorkoutModal} width={{base:"80%", md:"60"}} fontFamily="heading" fontWeight="semibold" fontSize="2xl" bg="#898DB7" _hover={{ bg: '#51546E' }} color="white" m={8}>
           Add Exercise
       </Button>

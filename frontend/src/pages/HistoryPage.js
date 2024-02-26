@@ -1,61 +1,53 @@
 import React, { useContext, useState, useEffect, useCallback } from "react";
 
 import AuthContext from "../context/AuthContext";
+import { formatDateBackend, formatDateReadable } from "../utils/DateTimeUtils"
 
 import { Box, Heading, Text } from "@chakra-ui/react";
 import { Table, TableContainer, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 
 import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css'; // Need this import in order to style react-calendar
 
 const HistoryPage = () => {
-  let { client } = useContext(AuthContext);
+  const { client } = useContext(AuthContext);
 
-  let [day, setDay] = useState(new Date());
-  let [history, setHistory] = useState([])
-
-  // this function converts dates like Mon Jan 1 2024 00:00:00 GMT-0500 (Eastern Standard Time) to 2024-01-01
-  // this date will be sent to the backend and is needed because my date field for my model rquires it
-  let formatDate = (date) => {
-    let year = date.getFullYear();
-    let month = date.getMonth() + 1;
-    let day = date.getDate();
-
-    return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-  };
+  const [day, setDay] = useState(new Date());
+  const [history, setHistory] = useState([])
 
   // handles date change when the user clicks a day on the calendar component
-  let handleDateChange = (newDate) => {
-    setDay(newDate);
-    getGymSession(newDate);
+  const handleDateChange = async (newDate) => {
+    try {
+      setDay(newDate);
+      await loadWorkouts(newDate);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  // gets and sets the workout for a gym session for a specfic day
-  let getGymSession = useCallback((selectedDate) => {
-    let specificDate = formatDate(selectedDate);
+  // gets and sets the workouts for a gym session on a specific day
+  const loadWorkouts = useCallback(async (selectedDate) => {
+    try {
+      const specificDate = formatDateBackend(selectedDate);
+      const res = await client.get(`api/gymsession/details/${specificDate}`, {});
 
-    client.get(`api/gymsession/details/${specificDate}`, {})
-    .then(function (res) {
-      if (res.data[0]) {
-        setHistory(res.data[0].workouts)
+      if (res.data[0]) {  // if a gym session for specific day exists
+        setHistory(res.data[0].workouts);
       } else {
-        setHistory([])
+        setHistory([]);
       }
-    })
-    .catch(function (error) {
+    } catch (error) {
       console.log(error);
-    });
+    }
   }, [client]);
 
-  // gets the gym session for the current day everytime the page rerenders
+  // loads the workouts for the current day everytime the page rerenders
   useEffect(() => {
-    getGymSession(day)
-  }, [day, getGymSession]);
+    loadWorkouts(day)
+  }, [day, loadWorkouts]);
 
   return (
     <Box>
-      <Heading display={{ base: "none", md: "block" }} fontFamily="heading" fontWeight="bold" fontSize="5xl">History</Heading>
-      <Heading display={{ base: "block", md: "none" }} fontFamily="heading" fontWeight="bold" fontSize="4xl">History</Heading>
+      <Heading fontFamily="heading" fontWeight="bold" fontSize={{ base: "4xl", md: "5xl" }}>History</Heading>
       <Box fontWeight="medium" fontSize="md" m="8">
         <Calendar
           onChange={handleDateChange}
@@ -65,8 +57,7 @@ const HistoryPage = () => {
         />
       </Box>
       <Text fontFamily="heading" fontWeight="semibold" fontSize="2xl" mt="8">
-        {/* converts dates like 2024-01-01 to Mon Jan 1 2024 00:00:00 GMT-0500 (Eastern Standard Time) for readibility */}
-        {day.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+        {formatDateReadable(day)}
       </Text>
       <Box>
         <TableContainer width="100%">

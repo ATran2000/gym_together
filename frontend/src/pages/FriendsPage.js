@@ -3,132 +3,106 @@ import React, { useContext, useState, useEffect } from "react";
 import AuthContext from "../context/AuthContext";
 
 import { Box, Heading, Button, Text } from "@chakra-ui/react";
-import { Table, TableContainer, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
-import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton } from '@chakra-ui/react';
-import { FormControl, FormLabel, Input } from '@chakra-ui/react'
+import { Table, TableContainer, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
+import { Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton } from "@chakra-ui/react";
+import { FormControl, FormLabel, Input } from "@chakra-ui/react";
 
 const FriendsPage = () => {
-  let { client, userFriends, setUserFriends } = useContext(AuthContext);
+  const { client, userFriends, setUserFriends, csrfToken } = useContext(AuthContext);
 
-  let [FriendRequests, setFriendRequests] = useState([])
-  let [FriendRequestsCount, setFriendRequestsCount] = useState(null)
+  const [FriendRequests, setFriendRequests] = useState([])
+  const [FriendRequestsCount, setFriendRequestsCount] = useState(null)
 
-  let [isOpenAddFriendModal, setOpenAddFriendModal] = useState(false);
-  let [isOpenFriendRequestModal, setOpenFriendRequestModal] = useState(false);
+  const [isOpenAddFriendModal, setOpenAddFriendModal] = useState(false);
+  const [isOpenFriendRequestModal, setOpenFriendRequestModal] = useState(false);
 
-  let toggleAddFriendModal = () => {
+  const toggleAddFriendModal = () => {
     setOpenAddFriendModal(!isOpenAddFriendModal);
   };
 
-  let toggleFriendRequestModal = () => {
+  const toggleFriendRequestModal = () => {
     setOpenFriendRequestModal(!isOpenFriendRequestModal);
   };
 
-  // function that will be used to get the csrftoken cookie
-  const getCookie = (name) => {
-    const value = `; ${document.cookie}`;  // Get the entire cookie string from the document
-    const parts = value.split(`; ${name}=`);  // Split the cookie string into an array of substrings, using the provided cookie name as the delimiter
-
-    if (parts.length === 2) {  // Check if there are two parts in the array
-      // If there are two parts, pop the last element, which contains the value of the cookie,
-      // and then split it by semicolon to remove any additional cookie-related information
-      return parts.pop().split(';').shift();
-    }
-
-    return null; // If there are not two parts, or the cookie with the specified name is not found, return null
-  };
-
-  const csrfToken = getCookie('csrftoken');
-
   // handles sending friend requests to other users
-  let sendFriendRequest = async (e) => {
-    e.preventDefault()
-
-    client.post("api/user/send_friend_request/", {
+  const sendFriendRequest = async (e) => {
+    e.preventDefault();
+  
+    try {
+      await client.post("api/user/send_friend_request/", {
         receiver_username: e.target.username.value
-      },
-      {
+      }, {
         withCredentials: true,
         headers: {
           'X-CSRFToken': csrfToken,
-      },
-    })
-    .then(function (res) { // this is so that the modal closes when the user submits
-      toggleAddFriendModal()
-    })
-    .catch(function(error) {
-      console.log(error)
-    })
-  }
+        },
+      });
+
+      toggleAddFriendModal();  // closes the modal when the user submits
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // handles accepting friend requests
-  let handleAccept = (friendRequestId) => {
-    client.post(`api/user/accept_friend_request/${friendRequestId}/`, null, {
-      withCredentials: true,
-      headers: {
-        'X-CSRFToken': csrfToken,
-      },
-    })
-    .then(function(res) {
-      // Remove the accepted friend request from the state and update num friend request
-      setFriendRequests(prevFriendRequests => prevFriendRequests.filter(FriendRequest => FriendRequest.id !== friendRequestId));
-      setFriendRequestsCount(prevCount => prevCount - 1);
-      
-      // Create new instance of accepted friend
-      let newFriend = res.data.sender;
-
-      // Update the friends state with the newly accepted friend
-      setUserFriends(prevFriends => [...prevFriends, newFriend]);
-    })
-    .catch(function(error) {
-      console.log(error)
-    });
-  };
+  const handleAccept = async (FriendRequest) => {
+    try {
+      await client.post(`api/user/accept_friend_request/${FriendRequest.id}/`, null, {
+        withCredentials: true,
+        headers: {
+          'X-CSRFToken': csrfToken,
+        },
+      });
   
-  // handles removing friend requests
-  let handleRemove = (friendRequestId) => {
-    client.post(`api/user/remove_friend_request/${friendRequestId}/`, null, {
-      withCredentials: true,
-      headers: {
-        'X-CSRFToken': csrfToken,
-      },
-    })
-    .then(function(res) {
-      console.log(res);
-
-      // Remove the removed friend request from the state and update num friend request
-      setFriendRequests(prevFriendRequests => prevFriendRequests.filter(FriendRequest => FriendRequest.id !== friendRequestId));
+      // removes the accepted friend request from the state and update num friend requests
+      setFriendRequests(FriendRequests => FriendRequests.filter(FriendRequestItem => FriendRequestItem.id !== FriendRequest.id));
       setFriendRequestsCount(prevCount => prevCount - 1);
-    })
-    .catch(function(error) {
-      console.log(error)
-    });
+  
+      // updates the friends state with the newly accepted friend
+      setUserFriends(prevFriends => [...prevFriends, FriendRequest.sender]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // handles removing friend requests
+  const handleRemove = async (FriendRequest) => {
+    try {
+      await client.post(`api/user/remove_friend_request/${FriendRequest.id}/`, null, {
+        withCredentials: true,
+        headers: {
+          'X-CSRFToken': csrfToken,
+        },
+      });
+
+      // removes the removed friend request from the state and update num friend requests
+      setFriendRequests(FriendRequests => FriendRequests.filter(FriendRequestItem => FriendRequestItem.id !== FriendRequest.id));
+      setFriendRequestsCount(prevCount => prevCount - 1);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // gets and sets the user's existing friend requests and the count of them
   useEffect(() => {
-    let getFriendRequests = () => {
-      client.get("api/user/friend_requests/", {
-      })
-      .then(function(res) {
-        let friendRequests = res.data
-        let numFriendRequests = friendRequests.length
+    const getFriendRequests = async () => {
+      try {
+        const res = await client.get("api/user/friend_requests/", {});
 
-        setFriendRequests(friendRequests)
-        setFriendRequestsCount(numFriendRequests)
-      })
-      .catch(function(error) {
-        console.log(error)
-      })
-    }
+        let friendRequests = res.data;
+        setFriendRequests(friendRequests);
+        setFriendRequestsCount(friendRequests.length);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-    getFriendRequests()
+    getFriendRequests();
   }, [client]);
 
   return (
     <Box>
-      <Heading display={{ base: "none", md: "block" }} fontFamily="heading" fontWeight="bold" fontSize="5xl">Friends</Heading>
-      <Heading display={{ base: "block", md: "none" }} fontFamily="heading" fontWeight="bold" fontSize="4xl">Friends</Heading>
+      <Heading fontFamily="heading" fontWeight="bold" fontSize={{ base: "4xl", md: "5xl" }}>Friends</Heading>
       <Button onClick={toggleAddFriendModal} width={{base:"80%", md:"60"}} fontFamily="heading" fontWeight="semibold" fontSize="2xl" bg="#898DB7" _hover={{ bg: '#51546E' }} color="white" m={8}>
           Add Friends
       </Button>
@@ -201,8 +175,8 @@ const FriendsPage = () => {
                 <Text fontFamily="body" fontWeight="regular" m="auto">
                   {FriendRequest.sender.username}
                 </Text>
-                <Button onClick={() => handleAccept(FriendRequest.id)} width="20" fontFamily="body" fontWeight="medium" bg="#898DB7" _hover={{ bg: '#51546E' }} color="white" ml="4">Accept</Button>
-                <Button onClick={() => handleRemove(FriendRequest.id)} width="20" fontFamily="body" fontWeight="medium" bg="#2D2D39" _hover={{ bg: '#51546E' }} color="white" ml="4">Remove</Button>
+                <Button onClick={() => handleAccept(FriendRequest)} width="20" fontFamily="body" fontWeight="medium" bg="#898DB7" _hover={{ bg: '#51546E' }} color="white" ml="4">Accept</Button>
+                <Button onClick={() => handleRemove(FriendRequest)} width="20" fontFamily="body" fontWeight="medium" bg="#2D2D39" _hover={{ bg: '#51546E' }} color="white" ml="4">Remove</Button>
               </Box>
             ))}
           </ModalBody>
