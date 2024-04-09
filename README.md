@@ -1,7 +1,6 @@
 # About
 
 ![Gym Together Login Page Image](https://github.com/ATran2000/gym_together/blob/main/images/GymTogether_LoginPage.jpg?raw=true)
-![Gym Together Home Page Image](https://github.com/ATran2000/gym_together/blob/main/images/GymTogether_HomePage.jpg?raw=true)
 
 I go to the gym consistently with my cousin during the evening, but sometimes, my cousin likes to go a little earlier. Therefore, before going to the gym, I would need to text 
 my cousin if we were still going to the gym together or not and vice versa which was a bit tedious. 
@@ -20,3 +19,10 @@ I also decided to create a class diagram displaying how my models behave and int
 This project is still in development, but the website is live and running. I intend to add update, deletion, and validation capabilities to the project. I will probably add more features like sending and accepting gym session invitations and more in the future.
 The link to the live website is the following:
  - [`https://www.gym-together.com/`](https://www.gym-together.com/)
+
+Below are images displaying the functionality of the website.
+![Gym Together Home Page Image](https://github.com/ATran2000/gym_together/blob/main/images/GymTogether_HomePage.JPG?raw=true)
+![Gym Together Friends Page Image](https://github.com/ATran2000/gym_together/blob/main/images/GymTogether_FriendsPage.JPG?raw=true)
+![Gym Together Scheduele Page Image](https://github.com/ATran2000/gym_together/blob/main/images/GymTogether_SchedulePage.JPG?raw=true)
+![Gym Together LogWorkout Page Image](https://github.com/ATran2000/gym_together/blob/main/images/GymTogether_LogWorkoutPage.JPG?raw=true)
+![Gym Together History Page Image](https://github.com/ATran2000/gym_together/blob/main/images/GymTogether_HistoryPage.JPG?raw=true)
