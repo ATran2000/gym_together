@@ -21,8 +21,8 @@ The link to the live website is the following:
  - [`https://www.gym-together.com/`](https://www.gym-together.com/)
 
 Below are images displaying the functionality of the website.
-![Gym Together Home Page Image](https://github.com/ATran2000/gym_together/blob/main/images/GymTogether_HomePage.JPG?raw=true)
-![Gym Together Friends Page Image](https://github.com/ATran2000/gym_together/blob/main/images/GymTogether_FriendsPage.JPG?raw=true)
-![Gym Together Scheduele Page Image](https://github.com/ATran2000/gym_together/blob/main/images/GymTogether_SchedulePage.JPG?raw=true)
-![Gym Together LogWorkout Page Image](https://github.com/ATran2000/gym_together/blob/main/images/GymTogether_LogWorkoutPage.JPG?raw=true)
-![Gym Together History Page Image](https://github.com/ATran2000/gym_together/blob/main/images/GymTogether_HistoryPage.JPG?raw=true)
+![Gym Together Home Page Image](https://github.com/ATran2000/gym_together/blob/main/images/GymTogether_HomePage.jpg?raw=true)
+![Gym Together Friends Page Image](https://github.com/ATran2000/gym_together/blob/main/images/GymTogether_FriendsPage.jpg?raw=true)
+![Gym Together Scheduele Page Image](https://github.com/ATran2000/gym_together/blob/main/images/GymTogether_SchedulePage.jpg?raw=true)
+![Gym Together LogWorkout Page Image](https://github.com/ATran2000/gym_together/blob/main/images/GymTogether_LogWorkoutPage.jpg?raw=true)
+![Gym Together History Page Image](https://github.com/ATran2000/gym_together/blob/main/images/GymTogether_HistoryPage.jpg?raw=true)
