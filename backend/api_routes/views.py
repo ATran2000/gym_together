@@ -13,7 +13,7 @@ def getRoutes(request):
         'api/user/friend_requests/',
         'api/user/send_friend_request/',
         'api/user/accept_friend_request/<int:friend_request_id>/',
-        'api/remove_friend_request/<int:friend_request_id>/',
+        'api/user/remove_friend_request/<int:friend_request_id>/',
         '',
         'api/gymsession/details',
         'api/gymsession/details/<str:day>/',
