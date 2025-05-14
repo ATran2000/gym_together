@@ -16,8 +16,11 @@ I also decided to create a class diagram displaying how my models behave and int
 
 ![Gym Together Class Diagram Image](https://github.com/ATran2000/gym_together/blob/main/images/GymTogether_ClassDiagram.jpg?raw=true)
 
-This project is still in development, but the website is live and running. I intend to add update, deletion, and validation capabilities to the project. I will probably add more features like sending and accepting gym session invitations and more in the future.
-The link to the live website is the following:
+This project is still in development. I intend to add update, deletion, and validation capabilities to the project. I will probably add more features like sending and accepting gym session invitations and more in the future.
+
+(Note: The website is currently down. The frontend was hosted on Netlify and the backend was running on Railway using free credits, which have been exhausted, resulting in the backend being paused. Additionally, the custom domain name associated with the site has expired, and I&apos;ve chosen not to renew it for now.)
+
+The link to the website is the following:
  - [`https://www.gym-together.com/`](https://www.gym-together.com/)
 
 Below are images displaying the functionality of the website.
